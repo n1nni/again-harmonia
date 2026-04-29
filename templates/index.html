@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Harmonia</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.7/build/opensheetmusicdisplay.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Harmonia</h1>
+    <label class="upload-btn">
+      Upload Score Scan
+      <input type="file" id="scanUpload" accept="image/*" hidden>
+    </label>
+    <button id="alignBtn" disabled>Align &amp; Overlay</button>
+    <button id="toggleDetection" type="button">Hide Detection</button>
+    <button id="toggleRegen" type="button">Hide Regenerated</button>
+    <div id="status"></div>
+  </header>
+
+  <main class="split-view">
+    <section class="panel" id="scanPanel">
+      <h2>Original Scan</h2>
+      <div class="scan-container" id="scanContainer">
+        <img id="scanImage" alt="Upload a scan to begin">
+        <svg id="overlaysvg" class="overlay-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </section>
+
+    <section class="panel" id="osmdPanel" style="display: none;">
+      <h2>Rendered Score</h2>
+      <div id="osmdContainer"></div>
+    </section>
+  </main>
+
+  <div id="noteEditor" class="modal hidden">
+    <div class="modal-content">
+      <h3>Edit Note</h3>
+      <label>Pitch
+        <select id="editPitch"></select>
+      </label>
+      <label>Duration
+        <select id="editDuration">
+          <option value="whole">whole</option>
+          <option value="half">half</option>
+          <option value="quarter">quarter</option>
+          <option value="eighth">eighth</option>
+          <option value="16th">16th</option>
+        </select>
+      </label>
+      <div class="modal-actions">
+        <button id="saveNote">Save</button>
+        <button id="cancelEdit">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/renderer.js"></script>
+  <script src="/static/js/overlay.js"></script>
+  <script src="/static/js/editor.js"></script>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
