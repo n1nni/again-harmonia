@@ -7,13 +7,16 @@ pixel coordinates on the uploaded scan.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
 import time
 import traceback
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
+import requests
 from flask import Flask, jsonify, request, send_from_directory, abort
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -26,15 +29,26 @@ from align.svg_parser import parse_osmd_svg
 BASE_DIR = Path(__file__).parent.resolve()
 UPLOAD_DIR = BASE_DIR / "uploads"
 CACHE_DIR = BASE_DIR / "cache"
+OMR_MUSICXML_DIR = BASE_DIR / "omr-musicxmls"
 TEMPLATE_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "static"
 
+OMR_MUSICXML_DIR.mkdir(parents=True, exist_ok=True)
+
 # The MusicXML file is swappable; override via env var if needed.
+# This is the FALLBACK score used when no OMR job has been submitted yet
+# (e.g. on first page load before any scan upload).
 MUSICXML_FILENAME = os.environ.get(
     "HARMONIA_MUSICXML",
     "06 Madlobeli var.musicxml",
 )
 MUSICXML_PATH = BASE_DIR / MUSICXML_FILENAME
+
+# External OMR service that turns an image into a rectified PNG + MusicXML.
+# See OMR_Iliauni/API.md for the response schema.
+OMR_API_URL = os.environ.get("OMR_API_URL", "http://127.0.0.1:5000").rstrip("/")
+# OMR pipeline can take 2-10 s on CPU; allow plenty of headroom.
+OMR_TIMEOUT = int(os.environ.get("OMR_TIMEOUT", "600"))
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "tif", "tiff", "bmp", "webp"}
 
@@ -60,6 +74,17 @@ def index():
 
 @app.route("/api/musicxml")
 def musicxml():
+    # When the frontend has just uploaded a scan, it passes ?job=<stamp> to
+    # fetch the MusicXML the OMR API produced for that scan. With no `job`
+    # arg we serve the bundled fallback score (used on initial page load).
+    job = request.args.get("job")
+    if job:
+        path = OMR_MUSICXML_DIR / f"{job}.musicxml"
+        if not path.exists():
+            abort(404, description=f"MusicXML for job {job} not found")
+        return path.read_text(encoding="utf-8"), 200, {
+            "Content-Type": "application/xml; charset=utf-8",
+        }
     if not MUSICXML_PATH.exists():
         abort(404, description=f"MusicXML file not found: {MUSICXML_PATH.name}")
     with open(MUSICXML_PATH, "r", encoding="utf-8") as f:
@@ -76,13 +101,203 @@ def upload():
     if not _allowed(file.filename):
         return jsonify(error="Unsupported file type"), 400
 
-    # Stamp the filename so repeated uploads don't collide.
+    # Stamp the filename so repeated uploads don't collide. The same stamp
+    # is reused as the OMR "job id" we expose to the frontend, so the
+    # rectified PNG, the original upload, and the recognized MusicXML are
+    # all addressable via that one identifier.
     stamp = str(int(time.time() * 1000))
     safe = secure_filename(file.filename)
-    stored_name = f"{stamp}_{safe}"
-    dest = UPLOAD_DIR / stored_name
-    file.save(dest)
-    return jsonify(filename=stored_name, url=f"/uploads/{stored_name}")
+    original_name = f"{stamp}_orig_{safe}"
+    original_path = UPLOAD_DIR / original_name
+    file.save(original_path)
+
+    # Forward to the OMR API (POST /process) and read back the full
+    # envelope: rectified PNG (base64) + detections + MusicXML.
+    # Stream the upload so we don't double-buffer the file in memory.
+    try:
+        with open(original_path, "rb") as fh:
+            resp = requests.post(
+                f"{OMR_API_URL}/process",
+                files={"image": (safe, fh, file.mimetype or "image/png")},
+                timeout=OMR_TIMEOUT,
+                stream=True,
+            )
+        resp.raise_for_status()
+        omr_data = resp.json()
+    except requests.exceptions.RequestException as exc:
+        traceback.print_exc()
+        return jsonify(
+            error=f"OMR API call failed at {OMR_API_URL}/process: {exc}",
+        ), 502
+
+    if "rectified_image_b64" not in omr_data or "xml" not in omr_data:
+        return jsonify(
+            error="OMR response missing rectified_image_b64 or xml",
+            payload_keys=list(omr_data.keys()),
+        ), 502
+
+    # Rectified PNG goes into uploads/ so the existing /uploads/<file>
+    # route serves it; this is the image the frontend will overlay dots on.
+    rectified_name = f"{stamp}_rectified.png"
+    rectified_path = UPLOAD_DIR / rectified_name
+    rectified_path.write_bytes(base64.b64decode(omr_data["rectified_image_b64"]))
+
+    # Recognized MusicXML lands in omr-musicxmls/, retrievable via
+    # /api/musicxml?job=<stamp>.
+    xml_path = OMR_MUSICXML_DIR / f"{stamp}.musicxml"
+    xml_path.write_text(omr_data["xml"], encoding="utf-8")
+
+    return jsonify(
+        filename=rectified_name,
+        url=f"/uploads/{rectified_name}",
+        original_filename=original_name,
+        original_url=f"/uploads/{original_name}",
+        musicxml_url=f"/api/musicxml?job={stamp}",
+        omr_notes_url=f"/api/omr_notes?job={stamp}",
+        job_id=omr_data.get("job_id") or stamp,
+    )
+
+
+# Notehead classes the OMR pipeline emits (DeepScores naming). We dot only
+# these — augmentation dots, slurs, beams, clefs, time/key sigs, etc. are
+# excluded even though they share the same `det_XXXX` id space.
+_NOTEHEAD_CLASSES = {
+    "noteheadblack",
+    "noteheadhalf",
+    "noteheadwhole",
+    "noteheaddoublewhole",
+    "noteheadblacksmall",
+    "noteheadhalfsmall",
+    "noteheadwholesmall",
+}
+
+
+def _pitch_string(note_el):
+    """Build a human-readable pitch label like 'F#4' from a <note> element."""
+    pitch_el = note_el.find("pitch")
+    if pitch_el is None:
+        return "?"
+    step_el = pitch_el.find("step")
+    octave_el = pitch_el.find("octave")
+    alter_el = pitch_el.find("alter")
+    step = step_el.text if step_el is not None and step_el.text else "?"
+    octave = octave_el.text if octave_el is not None and octave_el.text else "?"
+    alter = alter_el.text if alter_el is not None and alter_el.text else None
+    acc = {"1": "#", "2": "##", "-1": "b", "-2": "bb"}.get(alter, "")
+    return f"{step}{acc}{octave}"
+
+
+@app.route("/api/omr_notes")
+def omr_notes():
+    """Return notehead positions for a previously-uploaded scan.
+
+    Reads the OMR-produced MusicXML (saved at upload time), parses the
+    `omr-coordinates` JSON embedded in `<miscellaneous>`, then walks every
+    `<note id="det_XXXX">` and emits the dot for any note whose detection
+    class is a notehead. Coordinates are in rectified-image pixel space —
+    same coordinate system as the PNG the frontend is displaying.
+    """
+    job = request.args.get("job")
+    if not job:
+        return jsonify(error="job query param required"), 400
+
+    xml_path = OMR_MUSICXML_DIR / f"{job}.musicxml"
+    if not xml_path.exists():
+        return jsonify(error=f"MusicXML for job {job} not found"), 404
+
+    try:
+        root = ET.parse(str(xml_path)).getroot()
+    except ET.ParseError as exc:
+        return jsonify(error=f"MusicXML parse error: {exc}"), 500
+
+    coords_by_id = {}
+    image_width = None
+    image_height = None
+    for field in root.iter("miscellaneous-field"):
+        name = field.get("name")
+        text = field.text or ""
+        if name == "omr-coordinates" and text:
+            try:
+                arr = json.loads(text)
+                coords_by_id = {rec["id"]: rec for rec in arr if "id" in rec}
+            except (json.JSONDecodeError, TypeError):
+                pass
+        elif name == "omr-image-width" and text:
+            try:
+                image_width = int(text)
+            except ValueError:
+                pass
+        elif name == "omr-image-height" and text:
+            try:
+                image_height = int(text)
+            except ValueError:
+                pass
+
+    notes = []
+    # Walk per-part / per-measure so we can emit the same xml_key the JS
+    # renderer uses internally — f"{part_idx}_{measure_idx}_{visible_idx}".
+    # Visible-idx counts non-rest <note> elements within a measure (chord
+    # members included), matching renderer.js _rebuildXmlNoteIndex
+    # (visibleIdx increments per non-rest, regardless of <chord/> child).
+    for part_idx, part in enumerate(root.findall("part")):
+        for measure_idx, measure in enumerate(part.findall("measure")):
+            visible_idx = 0
+            for note_el in measure.findall("note"):
+                # Rests don't get a key and don't increment visible_idx.
+                if note_el.find("rest") is not None:
+                    continue
+                this_visible_idx = visible_idx
+                visible_idx += 1
+
+                det_id = note_el.get("id")
+                if not det_id:
+                    continue
+                rec = coords_by_id.get(det_id)
+                if not rec:
+                    continue
+                cls = (rec.get("class") or "").lower()
+                if cls not in _NOTEHEAD_CLASSES:
+                    continue
+
+                type_el = note_el.find("type")
+                duration = (
+                    type_el.text if type_el is not None and type_el.text
+                    else "quarter"
+                )
+
+                notes.append({
+                    "note_id": det_id,
+                    # The xml_key here is the bridge to OSMD's GraphicSheet
+                    # walk; the frontend uses it to look up the note's
+                    # rendered svgX/svgY/svgRx/svgRy for glyph cropping.
+                    "xml_key": f"{part_idx}_{measure_idx}_{this_visible_idx}",
+                    "part_idx": part_idx,
+                    "measure_idx": measure_idx,
+                    "visible_idx": this_visible_idx,
+                    # The overlay renderer expects scan_x/scan_y in image
+                    # pixels; OMR's cx/cy are exactly that for the rectified
+                    # PNG.
+                    "scan_x": float(rec.get("cx", 0)),
+                    "scan_y": float(rec.get("cy", 0)),
+                    "x1": float(rec.get("x1", 0)),
+                    "y1": float(rec.get("y1", 0)),
+                    "x2": float(rec.get("x2", 0)),
+                    "y2": float(rec.get("y2", 0)),
+                    "class": rec.get("class"),
+                    "confidence": float(rec.get("conf", 0.0)),
+                    "part_id": rec.get("part_id"),
+                    "staff_in_part": rec.get("staff_in_part"),
+                    "pitch": _pitch_string(note_el),
+                    "duration": duration,
+                })
+
+    return jsonify(
+        job_id=job,
+        image_width=image_width,
+        image_height=image_height,
+        count=len(notes),
+        notes=notes,
+    )
 
 
 @app.route("/uploads/<path:filename>")
@@ -281,4 +496,5 @@ def _build_scan_measures(scan_path, scan_systems, svg_systems):
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    # Port 5001 because the OMR API squats on 5000 by default.
+    app.run(host="127.0.0.1", port=5001, debug=True)

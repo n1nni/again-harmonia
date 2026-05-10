@@ -109,6 +109,26 @@ button:hover:not(:disabled) { background: #2563eb; }
   mix-blend-mode: multiply;
 }
 
+/* Per-note glyph clones from the OSMD render placed on top of the scan.
+   Click-through so dots (when present) stay clickable. We deliberately
+   skip mix-blend-mode here — multiplying blue with the scan's black ink
+   would mute the color; using opacity instead keeps the blue distinct
+   from the original scan notes. */
+.note-glyphs {
+  pointer-events: none;
+  opacity: 0.9;
+}
+/* Recolor every black-ink path/text from the cloned vf-stavenote groups
+   to blue so the OMR-recognized notes are visually distinct from the
+   scan's original notes underneath. Paths with fill="none" / stroke="none"
+   (transparent stems, etc.) are left alone. */
+.note-glyphs [fill="#000000"],
+.note-glyphs [fill="#000"],
+.note-glyphs [fill="black"] { fill: #2563eb; }
+.note-glyphs [stroke="#000000"],
+.note-glyphs [stroke="#000"],
+.note-glyphs [stroke="black"] { stroke: #2563eb; }
+
 #toggleDetection {
   background: #334155;
 }

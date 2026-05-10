@@ -11,14 +11,21 @@ class NoteOverlay {
     this._naturalHeight = 0;
     this._regenGroup = null;
     this._staffGroup = null;
+    this._glyphsGroup = null;
     this._dotsGroup = null;
     this._detectedSystems = null;
     this._showDetection = true;
     this._showRegen = true;
+    this._showGlyphs = true;
     // Cached inputs so we can re-render the regen overlay on window resize.
     this._osmdSvgText = null;
     this._svgMeasures = null;
     this._scanMeasuresForRegen = null;
+    // Cached inputs for the per-note glyph overlay (rerendered on resize).
+    // Holds the live OSMD container DOM node so getBBox can find the
+    // currently-rendered vf-stavenote groups.
+    this._osmdContainerForGlyphs = null;
+    this._omrNotesForGlyphs = null;
 
     window.addEventListener('resize', () => this._rescale());
   }
@@ -34,6 +41,13 @@ class NoteOverlay {
       this._staffGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       this._staffGroup.setAttribute('class', 'staff-detection');
       this.svg.appendChild(this._staffGroup);
+    }
+    // Glyphs sit above staff outlines but below dots — when dots are
+    // rendered they stay clickable on top.
+    if (!this._glyphsGroup) {
+      this._glyphsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      this._glyphsGroup.setAttribute('class', 'note-glyphs');
+      this.svg.appendChild(this._glyphsGroup);
     }
     if (!this._dotsGroup) {
       this._dotsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -53,6 +67,13 @@ class NoteOverlay {
     this._showRegen = !!flag;
     if (this._regenGroup) {
       this._regenGroup.style.display = flag ? '' : 'none';
+    }
+  }
+
+  setShowGlyphs(flag) {
+    this._showGlyphs = !!flag;
+    if (this._glyphsGroup) {
+      this._glyphsGroup.style.display = flag ? '' : 'none';
     }
   }
 
@@ -217,6 +238,125 @@ class NoteOverlay {
     this.setShowRegen(this._showRegen !== false);
   }
 
+  // Per-note glyph overlay using OSMD's VexFlow-style SVG output.
+  //
+  // OSMD wraps each rendered note in `<g class="vf-stavenote">`, with a
+  // `<g class="vf-notehead">` (notehead) and a `<g class="vf-stem">` (stem)
+  // inside. We pair each rendered stavenote with an OMR detection by
+  // document-order index — both lists exclude rests, so element N in the
+  // OSMD render is the same musical note as detection N coming back from
+  // /api/omr_notes.
+  //
+  // Placement:
+  //   - getBBox() on the original `vf-notehead` gives the notehead's center
+  //     in OSMD-svg pixel space.
+  //   - getBBox() on the original `vf-stavenote` gives the whole-glyph bbox
+  //     so we know the stem extends a known amount above/below.
+  //   - We deep-clone the stavenote, wrap it in a <g> with a transform that
+  //     (a) shifts the OSMD notehead center to the origin,
+  //     (b) scales OSMD pixels → display pixels by the ratio of OMR's
+  //         detected notehead width to OSMD's rendered notehead width,
+  //         multiplied by the scan→display scale, and
+  //     (c) translates the origin to the OMR notehead center on the
+  //         displayed scan.
+  //
+  // The cloned stavenote keeps its original path d-attributes; the wrapping
+  // <g transform=...> does all the positioning. Result: each note's actual
+  // SVG glyph from the right panel renders on top of the matching scan
+  // notehead on the left panel.
+  //
+  //   osmdContainer — the live DOM container that OSMD rendered into.
+  //                   Must be the right panel's `#osmdContainer` div with
+  //                   the SVG attached, not a serialized string (we need
+  //                   getBBox to work).
+  //   omrNotes      — payload.notes from /api/omr_notes; one entry per
+  //                   detected notehead with x1/y1/x2/y2 in rectified-PNG
+  //                   pixel coords.
+  renderNoteGlyphs(osmdContainer, omrNotes, naturalWidth, naturalHeight) {
+    this._osmdContainerForGlyphs = osmdContainer || null;
+    this._omrNotesForGlyphs = omrNotes || null;
+    this._naturalWidth = naturalWidth;
+    this._naturalHeight = naturalHeight;
+    this._updateSvgBox();
+    this._ensureGroups();
+
+    while (this._glyphsGroup.firstChild) {
+      this._glyphsGroup.removeChild(this._glyphsGroup.firstChild);
+    }
+    if (!osmdContainer || !omrNotes || !omrNotes.length) return;
+
+    const osmdSvg = osmdContainer.querySelector('svg');
+    if (!osmdSvg) return;
+
+    // Each note OSMD renders is `<g class="vf-stavenote">` containing a
+    // `<g class="vf-notehead">`. Rests are stavenotes without a notehead
+    // (or with `vf-rest`), so filter by presence of vf-notehead — the
+    // result is in document order and matches MusicXML's non-rest <note>
+    // sequence, which is the same order /api/omr_notes returns.
+    const stavenotes = Array.from(osmdSvg.querySelectorAll('g.vf-stavenote'))
+      .filter((sn) => sn.querySelector('.vf-notehead'));
+    if (!stavenotes.length) return;
+
+    const dispW = this.img.offsetWidth;
+    const dispH = this.img.offsetHeight;
+    if (dispW <= 0 || dispH <= 0) return;
+    const sx = dispW / naturalWidth;
+    const sy = dispH / naturalHeight;
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    const pairCount = Math.min(stavenotes.length, omrNotes.length);
+    let placed = 0;
+    for (let i = 0; i < pairCount; i++) {
+      const sn = stavenotes[i];
+      const omr = omrNotes[i];
+      const nhEl = sn.querySelector('.vf-notehead');
+      if (!nhEl) continue;
+
+      let nhBBox;
+      try {
+        nhBBox = nhEl.getBBox();
+      } catch (e) {
+        continue;
+      }
+      if (!nhBBox || nhBBox.width <= 0 || nhBBox.height <= 0) continue;
+
+      const osmdCx = nhBBox.x + nhBBox.width / 2;
+      const osmdCy = nhBBox.y + nhBBox.height / 2;
+
+      const omrCx = (omr.x1 + omr.x2) / 2;
+      const omrCy = (omr.y1 + omr.y2) / 2;
+      const omrW = omr.x2 - omr.x1;
+      if (omrW <= 0) continue;
+
+      // Match notehead width 1:1 to the OMR-detected notehead in scan
+      // pixels, then bake in the scan→display scale so the final transform
+      // emits display-pixel coordinates.
+      const noteScale = omrW / nhBBox.width;
+      const finalScaleX = noteScale * sx;
+      const finalScaleY = noteScale * sy;
+
+      // Right-to-left: shift OSMD notehead center to origin → scale → put
+      // origin at the OMR notehead center on the displayed scan.
+      const tx = omrCx * sx;
+      const ty = omrCy * sy;
+      const transform = (
+        `translate(${tx}, ${ty}) ` +
+        `scale(${finalScaleX}, ${finalScaleY}) ` +
+        `translate(${-osmdCx}, ${-osmdCy})`
+      );
+
+      const wrapper = document.createElementNS(SVG_NS, 'g');
+      wrapper.setAttribute('transform', transform);
+      wrapper.setAttribute('data-det-id', omr.note_id || '');
+      wrapper.appendChild(sn.cloneNode(true));
+      this._glyphsGroup.appendChild(wrapper);
+      placed++;
+    }
+
+    this.setShowGlyphs(this._showGlyphs !== false);
+    return placed;
+  }
+
   render(alignedNotes, naturalWidth, naturalHeight) {
     this._naturalWidth = naturalWidth;
     this._naturalHeight = naturalHeight;
@@ -289,6 +429,14 @@ class NoteOverlay {
         this._osmdSvgText,
         this._svgMeasures,
         this._scanMeasuresForRegen,
+        this._naturalWidth,
+        this._naturalHeight,
+      );
+    }
+    if (this._osmdContainerForGlyphs && this._omrNotesForGlyphs) {
+      this.renderNoteGlyphs(
+        this._osmdContainerForGlyphs,
+        this._omrNotesForGlyphs,
         this._naturalWidth,
         this._naturalHeight,
       );

@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Cached scan-system bboxes from the most recent /api/detect_staves call,
   // used to overlay the regenerated SVG on the scan in runAlignment.
   let scanSystemsCache = null;
+  // Cached OMR notehead detections so post-edit re-renders don't re-fetch.
+  // Stored as { url, notes, width, height } — these are the notes used to
+  // place per-note glyph crops over the scan.
+  let lastOmrGlyphs = null;
 
   const statusEl = document.getElementById('status');
   const setStatus = (msg) => { statusEl.textContent = msg; };
@@ -42,12 +46,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     setStatus('Error loading score: ' + e.message);
   }
 
-  // After the user corrects a note, re-render leaves dots stale; snap them
-  // back with a fresh align pass so the blue dots match the new layout.
+  // After the user corrects a note, OSMD reloads — the live SVG in the
+  // right panel is replaced with new vf-stavenote elements, so we just
+  // re-run the glyph overlay against the (now-updated) container.
   editor.onAfterSave = async () => {
     if (!uploadedFilename) return;
-    setStatus('Re-aligning after edit...');
-    await runAlignment();
+    if (lastOmrGlyphs) {
+      overlay.renderNoteGlyphs(
+        renderer.container,
+        lastOmrGlyphs.notes,
+        lastOmrGlyphs.width,
+        lastOmrGlyphs.height,
+      );
+    } else {
+      setStatus('Re-aligning after edit...');
+      await runAlignment();
+    }
   };
 
   // "Show detection" toggle.
@@ -77,11 +91,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleRegenBtn.textContent = 'Hide Regenerated';
   }
 
+  // "Show glyphs" toggle for the per-note OSMD-glyph overlay.
+  const toggleGlyphsBtn = document.getElementById('toggleGlyphs');
+  if (toggleGlyphsBtn) {
+    toggleGlyphsBtn.addEventListener('click', () => {
+      const next = toggleGlyphsBtn.dataset.on !== 'true';
+      toggleGlyphsBtn.dataset.on = next ? 'true' : 'false';
+      toggleGlyphsBtn.textContent = next ? 'Hide Glyphs' : 'Show Glyphs';
+      overlay.setShowGlyphs(next);
+    });
+    toggleGlyphsBtn.dataset.on = 'true';
+    toggleGlyphsBtn.textContent = 'Hide Glyphs';
+  }
+
   document.getElementById('scanUpload').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setStatus('Uploading scan...');
+    setStatus('Uploading scan to OMR...');
     const formData = new FormData();
     formData.append('scan', file);
 
@@ -95,23 +122,50 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    // /api/upload now forwards the image to the OMR API, so `data.filename`
+    // points to the *rectified* PNG and `data.musicxml_url` points to the
+    // recognized score. Both are keyed by the same job stamp.
     uploadedFilename = data.filename;
     const imgEl = document.getElementById('scanImage');
-    imgEl.src = '/uploads/' + uploadedFilename;
+    imgEl.src = data.url || ('/uploads/' + uploadedFilename);
 
     imgEl.onload = async () => {
       naturalWidth = imgEl.naturalWidth;
       naturalHeight = imgEl.naturalHeight;
       document.getElementById('alignBtn').disabled = false;
 
-      // Reveal the rendered-score panel and render OSMD now that the
-      // container has a non-zero width.
+      // Reveal the rendered-score panel.
       const osmdPanel = document.getElementById('osmdPanel');
       osmdPanel.style.display = '';
+
+      // Swap the right-hand score from the bundled fallback to the
+      // OMR-recognized MusicXML for this upload.
+      if (data.musicxml_url) {
+        setStatus('Loading recognized score...');
+        try {
+          await renderer.loadFromUrl(data.musicxml_url);
+        } catch (err) {
+          console.error(err);
+          setStatus('Failed to load recognized score: ' + err.message);
+          return;
+        }
+      }
+
       await renderer.render();
 
       setStatus('Scan loaded. Detecting staves...');
       await runDetection();
+      // Two overlays go up in parallel:
+      //   1) per-note glyph crops keyed by OMR det_id (precise notehead
+      //      placement using rectified-PNG pixel coords)
+      //   2) the per-measure regenerated SVG overlay (the proven
+      //      whole-measure render on top of the scan, drawn by
+      //      runAlignment via /api/align)
+      // Both populate independent SVG groups in overlay.js, so they
+      // coexist and either one can be toggled off via the header buttons.
+      if (data.omr_notes_url) {
+        await runOmrGlyphs(data.omr_notes_url);
+      }
       await runAlignment();
     };
   });
@@ -119,6 +173,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('alignBtn').addEventListener('click', async () => {
     await runAlignment();
   });
+
+  async function runOmrGlyphs(omrNotesUrl) {
+    if (!omrNotesUrl) return;
+    setStatus('Loading OMR notehead coordinates...');
+    try {
+      const res = await fetch(omrNotesUrl);
+      const payload = await res.json();
+      if (!res.ok) throw new Error(payload.error || 'omr_notes failed');
+
+      // OMR returns coords in the rectified PNG's own pixel space — the same
+      // space the overlay scales to via naturalWidth/naturalHeight.
+      const w = payload.image_width || naturalWidth;
+      const h = payload.image_height || naturalHeight;
+      lastOmrGlyphs = {
+        url: omrNotesUrl,
+        notes: payload.notes || [],
+        width: w,
+        height: h,
+      };
+
+      // Clone each `<g class="vf-stavenote">` from the OSMD-rendered SVG
+      // in the right panel and place it on the scan at the matching OMR
+      // notehead bbox. Pairing is by document order — both lists exclude
+      // rests so the Nth stavenote is the Nth /api/omr_notes entry.
+      const placed = overlay.renderNoteGlyphs(
+        renderer.container,
+        payload.notes || [],
+        w,
+        h,
+      );
+
+      const total = (payload.notes || []).length;
+      setStatus(`Overlaid ${placed || 0}/${total} note glyph(s) on scan.`);
+    } catch (err) {
+      console.error(err);
+      setStatus('OMR glyphs failed: ' + err.message);
+    }
+  }
 
   async function runDetection() {
     if (!uploadedFilename) return;
@@ -180,12 +272,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         setStatus(`Aligned ${n} note(s). Scan systems: ${ss}, SVG systems: ${vs}.`);
       }
 
-      // Attach xml_key so the editor can tell the renderer which note to edit.
-      const notesWithKey = (payload.notes || []).map((n) => {
-        const src = osmdNotes.find((o) => o.noteId === n.note_id);
-        return Object.assign({}, n, { xml_key: src && src.xmlKey });
-      });
-      overlay.render(notesWithKey, naturalWidth, naturalHeight);
+      // The OMR-driven per-note glyph overlay is now the primary visual
+      // (see runOmrGlyphs); we deliberately don't re-render alignment-pipeline
+      // dots here — they would compete with the glyph layer. The Align button
+      // is kept for the regenerated-SVG overlay below.
 
       // Affine-overlay the regenerated SVG on the scan, one *measure* at a
       // time. The same per-measure affine drives the dot positions in the

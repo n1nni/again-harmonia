@@ -23,6 +23,20 @@ class HarmoniaRenderer {
     this.onAfterRender = null;
   }
 
+  // Swap the score in place: fetch a different MusicXML URL and reload
+  // OSMD with it. Used after a scan upload to switch from the bundled
+  // fallback score to the one the OMR API recognized for that scan.
+  async loadFromUrl(musicxmlUrl) {
+    const response = await fetch(musicxmlUrl);
+    if (!response.ok) {
+      throw new Error(`MusicXML fetch failed: ${response.status}`);
+    }
+    this.xmlText = await response.text();
+    this._parseXml(this.xmlText);
+    this._applyLayoutDefaults();
+    await this.osmd.load(this.xmlText);
+  }
+
   async init(musicxmlUrl) {
     this.osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(this.container, {
       autoResize: false,
@@ -456,6 +470,11 @@ class HarmoniaRenderer {
                   const xmlKey = `${partIdx}_${measureIdx}_${visibleIdx}`;
                   const ourVisIdx = visibleIdx;
                   visibleIdx++;
+                  // The MusicXML <note id="det_XXXX"> attribute is OMR's
+                  // detection id; pull it out so the glyph overlay can
+                  // match this OSMD note to an OMR scan-pixel bbox.
+                  const xmlNoteEl = this.xmlNoteIndex.get(xmlKey);
+                  const detId = xmlNoteEl ? xmlNoteEl.getAttribute('id') : null;
 
                   // y always from OSMD (pitch position).
                   const cyUnit = abs.y + size.height / 2;
@@ -478,6 +497,7 @@ class HarmoniaRenderer {
                   notes.push({
                     noteId: `p${pageIdx}_s${sysIdx}_st${staffIdxInSys}_m${measureIdx}_i${ourVisIdx + 1}`,
                     xmlKey,
+                    detId,
                     pageIdx,
                     systemIdx: sysIdx,
                     staffIdx: staffIdxInSys,

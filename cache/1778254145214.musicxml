@@ -1,0 +1,557 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/3.0/partwise.dtd">
+<score-partwise version="3.0">
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name="omr-version">1.0</miscellaneous-field>
+      <miscellaneous-field name="omr-source-image">rectified.png</miscellaneous-field>
+      <miscellaneous-field name="omr-image-width">895</miscellaneous-field>
+      <miscellaneous-field name="omr-image-height">2032</miscellaneous-field>
+      <miscellaneous-field name="omr-coordinates">[{"id":"det_0001","class":"beam","conf":0.7311,"part_id":"P1","staff_in_part":0,"cx":623,"cy":185,"x1":612,"y1":177,"x2":635,"y2":193},{"id":"det_0002","class":"clefG","conf":0.6843,"part_id":"P1","staff_in_part":0,"cx":99,"cy":130,"x1":90,"y1":86,"x2":108,"y2":174},{"id":"det_0003","class":"restDoubleWhole","conf":0.6105,"part_id":"P1","staff_in_part":0,"cx":654,"cy":234,"x1":653,"y1":232,"x2":656,"y2":237},{"id":"det_0004","class":"slur","conf":0.5998,"part_id":"P1","staff_in_part":0,"cx":733,"cy":96,"x1":699,"y1":79,"x2":768,"y2":113},{"id":"det_0005","class":"timeSig4","conf":0.5551,"part_id":"P1","staff_in_part":0,"cx":515,"cy":128,"x1":511,"y1":118,"x2":519,"y2":139},{"id":"det_0006","class":"beam","conf":0.53,"part_id":"P1","staff_in_part":0,"cx":706,"cy":167,"x1":693,"y1":158,"x2":718,"y2":175},{"id":"det_0007","class":"restDoubleWhole","conf":0.442,"part_id":"P1","staff_in_part":0,"cx":750,"cy":234,"x1":749,"y1":232,"x2":752,"y2":237},{"id":"det_0008","class":"restDoubleWhole","conf":0.4415,"part_id":"P1","staff_in_part":0,"cx":407,"cy":234,"x1":406,"y1":232,"x2":409,"y2":237},{"id":"det_0009","class":"noteheadBlack","conf":0.436,"part_id":"P1","staff_in_part":0,"cx":251,"cy":119,"x1":247,"y1":112,"x2":255,"y2":126},{"id":"det_0010","class":"restWhole","conf":0.4344,"part_id":"P1","staff_in_part":0,"cx":706,"cy":165,"x1":694,"y1":153,"x2":719,"y2":177},{"id":"det_0011","class":"timeSig1","conf":0.3955,"part_id":"P1","staff_in_part":0,"cx":508,"cy":232,"x1":505,"y1":224,"x2":512,"y2":240},{"id":"det_0012","class":"timeSig2","conf":0.3911,"part_id":"P1","staff_in_part":0,"cx":612,"cy":231,"x1":609,"y1":223,"x2":615,"y2":240},{"id":"det_0013","class":"timeSigCutCommon","conf":0.3637,"part_id":"P1","staff_in_part":0,"cx":99,"cy":138,"x1":90,"y1":102,"x2":108,"y2":174},{"id":"det_0014","class":"timeSig1","conf":0.3501,"part_id":"P1","staff_in_part":0,"cx":698,"cy":228,"x1":694,"y1":216,"x2":702,"y2":240},{"id":"det_0015","class":"timeSigCutCommon","conf":0.3445,"part_id":"P1","staff_in_part":0,"cx":98,"cy":152,"x1":88,"y1":132,"x2":107,"y2":173},{"id":"det_0016","class":"slur","conf":0.3391,"part_id":"P1","staff_in_part":0,"cx":454,"cy":99,"x1":435,"y1":86,"x2":473,"y2":111},{"id":"det_0017","class":"restDoubleWhole","conf":0.3072,"part_id":"P1","staff_in_part":0,"cx":654,"cy":234,"x1":653,"y1":232,"x2":656,"y2":237},{"id":"det_0018","class":"slur","conf":0.2959,"part_id":"P1","staff_in_part":0,"cx":731,"cy":89,"x1":700,"y1":80,"x2":762,"y2":99},{"id":"det_0019","class":"noteheadBlack","conf":0.2851,"part_id":"P1","staff_in_part":0,"cx":219,"cy":121,"x1":216,"y1":117,"x2":222,"y2":125},{"id":"det_0020","class":"slur","conf":0.266,"part_id":"P1","staff_in_part":0,"cx":639,"cy":98,"x1":616,"y1":84,"x2":662,"y2":112},{"id":"det_0021","class":"restWhole","conf":0.755,"part_id":"P1","staff_in_part":1,"cx":145,"cy":1231,"x1":126,"y1":1221,"x2":165,"y2":1242},{"id":"det_0022","class":"restDoubleWhole","conf":0.739,"part_id":"P1","staff_in_part":1,"cx":596,"cy":1288,"x1":595,"y1":1286,"x2":598,"y2":1291},{"id":"det_0023","class":"clefG","conf":0.6832,"part_id":"P1","staff_in_part":1,"cx":99,"cy":1185,"x1":90,"y1":1140,"x2":108,"y2":1231},{"id":"det_0024","class":"timeSig0","conf":0.542,"part_id":"P1","staff_in_part":1,"cx":203,"cy":1286,"x1":199,"y1":1278,"x2":207,"y2":1294},{"id":"det_0025","class":"beam","conf":0.5291,"part_id":"P1","staff_in_part":1,"cx":658,"cy":1237,"x1":640,"y1":1225,"x2":677,"y2":1249},{"id":"det_0026","class":"timeSig0","conf":0.5206,"part_id":"P1","staff_in_part":1,"cx":415,"cy":1282,"x1":412,"y1":1271,"x2":419,"y2":1294},{"id":"det_0027","class":"timeSig1","conf":0.5167,"part_id":"P1","staff_in_part":1,"cx":415,"cy":1282,"x1":412,"y1":1271,"x2":419,"y2":1294},{"id":"det_0028","class":"slur","conf":0.5117,"part_id":"P1","staff_in_part":1,"cx":147,"cy":1151,"x1":130,"y1":1141,"x2":164,"y2":1161},{"id":"det_0029","class":"noteheadBlack","conf":0.4645,"part_id":"P1","staff_in_part":1,"cx":423,"cy":1175,"x1":420,"y1":1171,"x2":426,"y2":1179},{"id":"det_0030","class":"accidentalNatural","conf":0.4274,"part_id":"P1","staff_in_part":1,"cx":204,"cy":1166,"x1":201,"y1":1155,"x2":208,"y2":1178},{"id":"det_0031","class":"timeSigCutCommon","conf":0.4124,"part_id":"P1","staff_in_part":1,"cx":99,"cy":1196,"x1":90,"y1":1161,"x2":108,"y2":1231},{"id":"det_0032","class":"noteheadBlack","conf":0.4103,"part_id":"P1","staff_in_part":1,"cx":423,"cy":1171,"x1":420,"y1":1167,"x2":426,"y2":1175},{"id":"det_0033","class":"keySharp","conf":0.3962,"part_id":"P1","staff_in_part":1,"cx":97,"cy":1255,"x1":94,"y1":1239,"x2":101,"y2":1271},{"id":"det_0034","class":"timeSig0","conf":0.3705,"part_id":"P1","staff_in_part":1,"cx":548,"cy":1286,"x1":545,"y1":1278,"x2":552,"y2":1294},{"id":"det_0035","class":"noteheadBlack","conf":0.3697,"part_id":"P1","staff_in_part":1,"cx":643,"cy":1174,"x1":639,"y1":1166,"x2":647,"y2":1182},{"id":"det_0036","class":"timeSig1","conf":0.3587,"part_id":"P1","staff_in_part":1,"cx":718,"cy":1186,"x1":714,"y1":1174,"x2":722,"y2":1198},{"id":"det_0037","class":"timeSig1","conf":0.343,"part_id":"P1","staff_in_part":1,"cx":711,"cy":1286,"x1":708,"y1":1278,"x2":715,"y2":1294},{"id":"det_0038","class":"timeSig1","conf":0.3329,"part_id":"P1","staff_in_part":1,"cx":423,"cy":1285,"x1":420,"y1":1277,"x2":426,"y2":1294},{"id":"det_0039","class":"caesura","conf":0.3318,"part_id":"P1","staff_in_part":1,"cx":678,"cy":1161,"x1":676,"y1":1155,"x2":681,"y2":1168},{"id":"det_0040","class":"timeSig0","conf":0.3099,"part_id":"P1","staff_in_part":1,"cx":141,"cy":1286,"x1":138,"y1":1278,"x2":145,"y2":1294},{"id":"det_0041","class":"noteheadBlack","conf":0.2782,"part_id":"P1","staff_in_part":1,"cx":463,"cy":1174,"x1":460,"y1":1166,"x2":466,"y2":1182},{"id":"det_0042","class":"beam","conf":0.2632,"part_id":"P1","staff_in_part":1,"cx":144,"cy":1233,"x1":126,"y1":1226,"x2":163,"y2":1240},{"id":"det_0043","class":"noteheadBlack","conf":0.2571,"part_id":"P1","staff_in_part":1,"cx":167,"cy":1174,"x1":164,"y1":1166,"x2":170,"y2":1182},{"id":"det_0044","class":"timeSig7","conf":0.2531,"part_id":"P1","staff_in_part":1,"cx":133,"cy":1282,"x1":129,"y1":1271,"x2":137,"y2":1294},{"id":"det_0045","class":"slur","conf":0.9027,"part_id":"P2","staff_in_part":0,"cx":735,"cy":430,"x1":698,"y1":416,"x2":772,"y2":445},{"id":"det_0046","class":"slur","conf":0.7615,"part_id":"P2","staff_in_part":0,"cx":641,"cy":435,"x1":619,"y1":425,"x2":662,"y2":444},{"id":"det_0047","class":"restDoubleWhole","conf":0.6887,"part_id":"P2","staff_in_part":0,"cx":750,"cy":586,"x1":749,"y1":584,"x2":752,"y2":589},{"id":"det_0048","class":"restDoubleWhole","conf":0.667,"part_id":"P2","staff_in_part":0,"cx":654,"cy":586,"x1":653,"y1":584,"x2":656,"y2":589},{"id":"det_0049","class":"beam","conf":0.6456,"part_id":"P2","staff_in_part":0,"cx":706,"cy":538,"x1":694,"y1":530,"x2":718,"y2":546},{"id":"det_0050","class":"timeSig1","conf":0.6345,"part_id":"P2","staff_in_part":0,"cx":508,"cy":584,"x1":505,"y1":576,"x2":512,"y2":592},{"id":"det_0051","class":"restDoubleWhole","conf":0.5552,"part_id":"P2","staff_in_part":0,"cx":132,"cy":485,"x1":128,"y1":480,"x2":136,"y2":490},{"id":"det_0052","class":"restDoubleWhole","conf":0.5166,"part_id":"P2","staff_in_part":0,"cx":407,"cy":586,"x1":406,"y1":584,"x2":409,"y2":589},{"id":"det_0053","class":"timeSigCutCommon","conf":0.516,"part_id":"P2","staff_in_part":0,"cx":98,"cy":502,"x1":90,"y1":477,"x2":107,"y2":528},{"id":"det_0054","class":"timeSig0","conf":0.5099,"part_id":"P2","staff_in_part":0,"cx":706,"cy":584,"x1":703,"y1":576,"x2":710,"y2":592},{"id":"det_0055","class":"beam","conf":0.4937,"part_id":"P2","staff_in_part":0,"cx":761,"cy":444,"x1":748,"y1":431,"x2":773,"y2":457},{"id":"det_0056","class":"clefG","conf":0.4914,"part_id":"P2","staff_in_part":0,"cx":98,"cy":488,"x1":90,"y1":448,"x2":107,"y2":528},{"id":"det_0057","class":"timeSigCutCommon","conf":0.4475,"part_id":"P2","staff_in_part":0,"cx":98,"cy":494,"x1":90,"y1":460,"x2":107,"y2":528},{"id":"det_0058","class":"timeSig1","conf":0.4437,"part_id":"P2","staff_in_part":0,"cx":224,"cy":584,"x1":221,"y1":576,"x2":227,"y2":592},{"id":"det_0059","class":"noteheadBlack","conf":0.439,"part_id":"P2","staff_in_part":0,"cx":632,"cy":449,"x1":621,"y1":442,"x2":643,"y2":456},{"id":"det_0060","class":"noteheadBlack","conf":0.432,"part_id":"P2","staff_in_part":0,"cx":721,"cy":481,"x1":718,"y1":475,"x2":724,"y2":487},{"id":"det_0061","class":"timeSig0","conf":0.4109,"part_id":"P2","staff_in_part":0,"cx":698,"cy":580,"x1":694,"y1":568,"x2":702,"y2":592},{"id":"det_0062","class":"restQuarter","conf":0.4083,"part_id":"P2","staff_in_part":0,"cx":616,"cy":505,"x1":612,"y1":494,"x2":620,"y2":517},{"id":"det_0063","class":"accidentalFlat","conf":0.3663,"part_id":"P2","staff_in_part":0,"cx":515,"cy":496,"x1":512,"y1":483,"x2":519,"y2":509},{"id":"det_0064","class":"slur","conf":0.3563,"part_id":"P2","staff_in_part":0,"cx":454,"cy":456,"x1":435,"y1":450,"x2":473,"y2":462},{"id":"det_0065","class":"timeSig1","conf":0.3441,"part_id":"P2","staff_in_part":0,"cx":698,"cy":580,"x1":694,"y1":568,"x2":702,"y2":592},{"id":"det_0066","class":"coda","conf":0.3018,"part_id":"P2","staff_in_part":0,"cx":98,"cy":492,"x1":90,"y1":457,"x2":107,"y2":528},{"id":"det_0067","class":"restDoubleWhole","conf":0.2803,"part_id":"P2","staff_in_part":0,"cx":654,"cy":586,"x1":653,"y1":584,"x2":656,"y2":589},{"id":"det_0068","class":"keyFlat","conf":0.273,"part_id":"P2","staff_in_part":0,"cx":99,"cy":456,"x1":95,"y1":436,"x2":103,"y2":477},{"id":"det_0069","class":"timeSig1","conf":0.2687,"part_id":"P2","staff_in_part":0,"cx":515,"cy":496,"x1":512,"y1":483,"x2":519,"y2":509},{"id":"det_0070","class":"keyNatural","conf":0.2615,"part_id":"P2","staff_in_part":0,"cx":97,"cy":557,"x1":94,"y1":545,"x2":101,"y2":569},{"id":"det_0071","class":"restWhole","conf":0.8471,"part_id":"P2","staff_in_part":1,"cx":147,"cy":1582,"x1":138,"y1":1579,"x2":157,"y2":1586},{"id":"det_0072","class":"noteheadBlack","conf":0.5833,"part_id":"P2","staff_in_part":1,"cx":673,"cy":1504,"x1":664,"y1":1496,"x2":682,"y2":1512},{"id":"det_0073","class":"restWhole","conf":0.5761,"part_id":"P2","staff_in_part":1,"cx":247,"cy":1629,"x1":243,"y1":1625,"x2":251,"y2":1633},{"id":"det_0074","class":"noteheadBlack","conf":0.4865,"part_id":"P2","staff_in_part":1,"cx":464,"cy":1542,"x1":461,"y1":1539,"x2":467,"y2":1545},{"id":"det_0075","class":"noteheadBlack","conf":0.4639,"part_id":"P2","staff_in_part":1,"cx":669,"cy":1502,"x1":655,"y1":1491,"x2":683,"y2":1513},{"id":"det_0076","class":"timeSig0","conf":0.4574,"part_id":"P2","staff_in_part":1,"cx":203,"cy":1639,"x1":199,"y1":1632,"x2":207,"y2":1647},{"id":"det_0077","class":"timeSig7","conf":0.4143,"part_id":"P2","staff_in_part":1,"cx":133,"cy":1636,"x1":129,"y1":1625,"x2":137,"y2":1647},{"id":"det_0078","class":"beam","conf":0.4071,"part_id":"P2","staff_in_part":1,"cx":152,"cy":1495,"x1":133,"y1":1487,"x2":171,"y2":1503},{"id":"det_0079","class":"flag8thDown","conf":0.3938,"part_id":"P2","staff_in_part":1,"cx":163,"cy":1575,"x1":158,"y1":1568,"x2":168,"y2":1582},{"id":"det_0080","class":"noteheadBlack","conf":0.382,"part_id":"P2","staff_in_part":1,"cx":350,"cy":1545,"x1":347,"y1":1539,"x2":353,"y2":1551},{"id":"det_0081","class":"clefG","conf":0.3732,"part_id":"P2","staff_in_part":1,"cx":98,"cy":1538,"x1":90,"y1":1495,"x2":107,"y2":1582},{"id":"det_0082","class":"noteheadBlack","conf":0.3661,"part_id":"P2","staff_in_part":1,"cx":168,"cy":1544,"x1":165,"y1":1539,"x2":171,"y2":1549},{"id":"det_0083","class":"keyFlat","conf":0.3629,"part_id":"P2","staff_in_part":1,"cx":99,"cy":1513,"x1":94,"y1":1490,"x2":104,"y2":1536},{"id":"det_0084","class":"noteheadBlack","conf":0.3502,"part_id":"P2","staff_in_part":1,"cx":144,"cy":1497,"x1":134,"y1":1491,"x2":154,"y2":1503},{"id":"det_0085","class":"timeSigCutCommon","conf":0.3205,"part_id":"P2","staff_in_part":1,"cx":98,"cy":1561,"x1":89,"y1":1541,"x2":107,"y2":1582},{"id":"det_0086","class":"noteheadBlack","conf":0.3164,"part_id":"P2","staff_in_part":1,"cx":463,"cy":1544,"x1":460,"y1":1540,"x2":466,"y2":1548},{"id":"det_0087","class":"timeSig1","conf":0.2817,"part_id":"P2","staff_in_part":1,"cx":255,"cy":1639,"x1":252,"y1":1632,"x2":259,"y2":1647},{"id":"det_0088","class":"noteheadBlack","conf":0.2701,"part_id":"P2","staff_in_part":1,"cx":351,"cy":1544,"x1":348,"y1":1539,"x2":354,"y2":1549},{"id":"det_0089","class":"beam","conf":0.2543,"part_id":"P2","staff_in_part":1,"cx":666,"cy":1499,"x1":647,"y1":1488,"x2":685,"y2":1511},{"id":"det_0090","class":"noteheadBlack","conf":0.8121,"part_id":"P3","staff_in_part":0,"cx":286,"cy":811,"x1":283,"y1":808,"x2":289,"y2":814},{"id":"det_0091","class":"slur","conf":0.7621,"part_id":"P3","staff_in_part":0,"cx":732,"cy":794,"x1":698,"y1":779,"x2":766,"y2":810},{"id":"det_0092","class":"noteheadBlack","conf":0.7372,"part_id":"P3","staff_in_part":0,"cx":433,"cy":816,"x1":430,"y1":812,"x2":436,"y2":820},{"id":"det_0093","class":"noteheadBlack","conf":0.7294,"part_id":"P3","staff_in_part":0,"cx":314,"cy":807,"x1":311,"y1":805,"x2":317,"y2":809},{"id":"det_0094","class":"noteheadBlack","conf":0.7182,"part_id":"P3","staff_in_part":0,"cx":313,"cy":817,"x1":310,"y1":814,"x2":316,"y2":820},{"id":"det_0095","class":"noteheadBlack","conf":0.7046,"part_id":"P3","staff_in_part":0,"cx":344,"cy":817,"x1":341,"y1":814,"x2":347,"y2":820},{"id":"det_0096","class":"timeSig0","conf":0.6889,"part_id":"P3","staff_in_part":0,"cx":99,"cy":828,"x1":94,"y1":803,"x2":104,"y2":853},{"id":"det_0097","class":"beam","conf":0.6836,"part_id":"P3","staff_in_part":0,"cx":623,"cy":880,"x1":612,"y1":872,"x2":635,"y2":887},{"id":"det_0098","class":"slur","conf":0.6595,"part_id":"P3","staff_in_part":0,"cx":641,"cy":793,"x1":620,"y1":784,"x2":663,"y2":803},{"id":"det_0099","class":"noteheadBlack","conf":0.6478,"part_id":"P3","staff_in_part":0,"cx":663,"cy":817,"x1":660,"y1":814,"x2":666,"y2":820},{"id":"det_0100","class":"noteheadBlack","conf":0.618,"part_id":"P3","staff_in_part":0,"cx":285,"cy":817,"x1":282,"y1":814,"x2":288,"y2":820},{"id":"det_0101","class":"noteheadBlack","conf":0.5912,"part_id":"P3","staff_in_part":0,"cx":286,"cy":808,"x1":283,"y1":806,"x2":289,"y2":810},{"id":"det_0102","class":"restDoubleWhole","conf":0.5886,"part_id":"P3","staff_in_part":0,"cx":132,"cy":836,"x1":128,"y1":830,"x2":136,"y2":842},{"id":"det_0103","class":"noteheadBlack","conf":0.5711,"part_id":"P3","staff_in_part":0,"cx":220,"cy":807,"x1":217,"y1":804,"x2":223,"y2":810},{"id":"det_0104","class":"slur","conf":0.5268,"part_id":"P3","staff_in_part":0,"cx":640,"cy":796,"x1":617,"y1":784,"x2":663,"y2":809},{"id":"det_0105","class":"noteheadBlack","conf":0.5263,"part_id":"P3","staff_in_part":0,"cx":251,"cy":817,"x1":248,"y1":814,"x2":254,"y2":820},{"id":"det_0106","class":"noteheadBlack","conf":0.5252,"part_id":"P3","staff_in_part":0,"cx":664,"cy":810,"x1":661,"y1":807,"x2":667,"y2":813},{"id":"det_0107","class":"noteheadBlack","conf":0.5208,"part_id":"P3","staff_in_part":0,"cx":314,"cy":812,"x1":311,"y1":808,"x2":317,"y2":816},{"id":"det_0108","class":"noteheadBlack","conf":0.5176,"part_id":"P3","staff_in_part":0,"cx":705,"cy":861,"x1":693,"y1":853,"x2":717,"y2":869},{"id":"det_0109","class":"noteheadBlack","conf":0.5094,"part_id":"P3","staff_in_part":0,"cx":219,"cy":817,"x1":216,"y1":814,"x2":222,"y2":820},{"id":"det_0110","class":"noteheadBlack","conf":0.5028,"part_id":"P3","staff_in_part":0,"cx":252,"cy":807,"x1":249,"y1":804,"x2":255,"y2":810},{"id":"det_0111","class":"slur","conf":0.4992,"part_id":"P3","staff_in_part":0,"cx":453,"cy":797,"x1":435,"y1":786,"x2":472,"y2":807},{"id":"det_0112","class":"noteheadBlack","conf":0.4971,"part_id":"P3","staff_in_part":0,"cx":219,"cy":813,"x1":216,"y1":810,"x2":222,"y2":816},{"id":"det_0113","class":"staff","conf":0.4885,"part_id":"P3","staff_in_part":0,"cx":302,"cy":777,"x1":83,"y1":765,"x2":521,"y2":788},{"id":"det_0114","class":"restWhole","conf":0.4751,"part_id":"P3","staff_in_part":0,"cx":706,"cy":861,"x1":694,"y1":850,"x2":719,"y2":872},{"id":"det_0115","class":"noteheadBlack","conf":0.4489,"part_id":"P3","staff_in_part":0,"cx":251,"cy":813,"x1":248,"y1":810,"x2":254,"y2":816},{"id":"det_0116","class":"noteheadBlack","conf":0.4469,"part_id":"P3","staff_in_part":0,"cx":434,"cy":810,"x1":431,"y1":806,"x2":437,"y2":814},{"id":"det_0117","class":"beam","conf":0.4436,"part_id":"P3","staff_in_part":0,"cx":754,"cy":874,"x1":741,"y1":862,"x2":766,"y2":887},{"id":"det_0118","class":"noteheadBlack","conf":0.4242,"part_id":"P3","staff_in_part":0,"cx":745,"cy":807,"x1":742,"y1":804,"x2":748,"y2":810},{"id":"det_0119","class":"noteheadBlack","conf":0.3957,"part_id":"P3","staff_in_part":0,"cx":345,"cy":810,"x1":342,"y1":806,"x2":348,"y2":814},{"id":"det_0120","class":"noteheadBlack","conf":0.3886,"part_id":"P3","staff_in_part":0,"cx":251,"cy":809,"x1":248,"y1":805,"x2":254,"y2":813},{"id":"det_0121","class":"noteheadBlack","conf":0.3782,"part_id":"P3","staff_in_part":0,"cx":745,"cy":812,"x1":742,"y1":807,"x2":748,"y2":817},{"id":"det_0122","class":"noteheadBlack","conf":0.3404,"part_id":"P3","staff_in_part":0,"cx":663,"cy":813,"x1":660,"y1":810,"x2":666,"y2":816},{"id":"det_0123","class":"noteheadBlack","conf":0.3305,"part_id":"P3","staff_in_part":0,"cx":664,"cy":810,"x1":661,"y1":806,"x2":667,"y2":814},{"id":"det_0124","class":"accidentalNatural","conf":0.3298,"part_id":"P3","staff_in_part":0,"cx":697,"cy":815,"x1":694,"y1":803,"x2":701,"y2":827},{"id":"det_0125","class":"noteheadBlack","conf":0.3064,"part_id":"P3","staff_in_part":0,"cx":639,"cy":821,"x1":635,"y1":813,"x2":643,"y2":829},{"id":"det_0126","class":"slur","conf":0.3011,"part_id":"P3","staff_in_part":0,"cx":534,"cy":797,"x1":518,"y1":789,"x2":551,"y2":806},{"id":"det_0127","class":"restQuarter","conf":0.2836,"part_id":"P3","staff_in_part":0,"cx":252,"cy":850,"x1":248,"y1":829,"x2":256,"y2":872},{"id":"det_0128","class":"noteheadBlack","conf":0.2768,"part_id":"P3","staff_in_part":0,"cx":515,"cy":822,"x1":512,"y1":813,"x2":518,"y2":831},{"id":"det_0129","class":"beam","conf":0.6851,"part_id":"P3","staff_in_part":1,"cx":144,"cy":1930,"x1":126,"y1":1921,"x2":163,"y2":1938},{"id":"det_0130","class":"noteheadBlack","conf":0.5293,"part_id":"P3","staff_in_part":1,"cx":350,"cy":1867,"x1":347,"y1":1862,"x2":353,"y2":1872},{"id":"det_0131","class":"noteheadBlack","conf":0.4008,"part_id":"P3","staff_in_part":1,"cx":463,"cy":1873,"x1":460,"y1":1870,"x2":466,"y2":1876},{"id":"det_0132","class":"slur","conf":0.3984,"part_id":"P3","staff_in_part":1,"cx":148,"cy":1843,"x1":131,"y1":1836,"x2":165,"y2":1851},{"id":"det_0133","class":"flag8thUp","conf":0.3909,"part_id":"P3","staff_in_part":1,"cx":718,"cy":1880,"x1":714,"y1":1870,"x2":722,"y2":1891},{"id":"det_0134","class":"staff","conf":0.3745,"part_id":"P3","staff_in_part":1,"cx":434,"cy":1916,"x1":200,"y1":1884,"x2":669,"y2":1947},{"id":"det_0135","class":"clefF","conf":0.3346,"part_id":"P3","staff_in_part":1,"cx":663,"cy":1854,"x1":646,"y1":1841,"x2":681,"y2":1868},{"id":"det_0136","class":"noteheadBlack","conf":0.3062,"part_id":"P3","staff_in_part":1,"cx":351,"cy":1863,"x1":348,"y1":1860,"x2":354,"y2":1866},{"id":"det_0137","class":"noteheadBlack","conf":0.271,"part_id":"P3","staff_in_part":1,"cx":145,"cy":1930,"x1":127,"y1":1921,"x2":163,"y2":1939},{"id":"det_0138","class":"noteheadBlack","conf":0.2553,"part_id":"P3","staff_in_part":1,"cx":463,"cy":1869,"x1":460,"y1":1865,"x2":466,"y2":1873}]</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <part-group number="1" type="start">
+      <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P1">
+      <score-instrument id="P1-I1">
+        <instrument-name>Clarinet 1</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P2">
+      <score-instrument id="P2-I1">
+        <instrument-name>Clarinet 2</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P2-I1">
+        <midi-channel>2</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P3">
+      <score-instrument id="P3-I1">
+        <instrument-name>Clarinet 3</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P3-I1">
+        <midi-channel>3</midi-channel>
+        <midi-program>72</midi-program>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+  </part-list>
+  <defaults>
+    <scaling>
+      <millimeters>6.1807</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+  </defaults>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="15.0" default-y="-11.51" id="det_0019">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="32.53" default-y="-10.41" id="det_0009">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="2">
+      <print new-system="yes"/>
+      <note default-x="15.0" default-y="-9.86" id="det_0043">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="155.27" default-y="-10.41" id="det_0029">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="155.27" default-y="-8.22" id="det_0032">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="177.19" default-y="-9.86" id="det_0041">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="275.82" default-y="-9.86" id="det_0035">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+  </part>
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key>
+          <fifths>-1</fifths>
+          <mode>major</mode>
+        </key>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="15.0" default-y="1.64" id="det_0059">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="63.77" default-y="-15.89" id="det_0060">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="2">
+      <print new-system="yes"/>
+      <note default-x="15.0" default-y="6.58" id="det_0084">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note default-x="28.15" default-y="-19.18" id="det_0082">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note default-x="127.88" default-y="-19.73" id="det_0080">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="128.42000000000002" default-y="-19.18" id="det_0088">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="189.79" default-y="-19.18" id="det_0086">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="190.34" default-y="-18.08" id="det_0074">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="302.67" default-y="3.84" id="det_0075">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="304.86" default-y="2.74" id="det_0072">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+  </part>
+  <part id="P3">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="15.0" default-y="-7.12" id="det_0109">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="15.0" default-y="-4.93" id="det_0112">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="15.55" default-y="-1.64" id="det_0103">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="32.53" default-y="-7.12" id="det_0105">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="32.53" default-y="-4.93" id="det_0115">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="32.53" default-y="-2.74" id="det_0120">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="33.08" default-y="-1.64" id="det_0110">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="51.16" default-y="-7.12" id="det_0100">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="51.71" default-y="-3.84" id="det_0090">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="51.71" default-y="-2.19" id="det_0101">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="66.50999999999999" default-y="-7.12" id="det_0094">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="67.05" default-y="-1.64" id="det_0093">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="67.05" default-y="-4.38" id="det_0107">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="83.49" default-y="-7.12" id="det_0095">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="84.04" default-y="-3.29" id="det_0119">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="132.26" default-y="-6.58" id="det_0092">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur number="1" type="start"/>
+        </notations>
+      </note>
+      <note default-x="132.81" default-y="-3.29" id="det_0116">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur number="1" type="stop"/>
+        </notations>
+      </note>
+      <note default-x="177.19" default-y="-9.86" id="det_0128">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="245.14" default-y="-9.32" id="det_0125">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur number="1" type="start"/>
+        </notations>
+      </note>
+      <note default-x="258.28999999999996" default-y="-7.12" id="det_0099">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="258.28999999999996" default-y="-4.93" id="det_0122">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="258.83000000000004" default-y="-3.29" id="det_0106">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="258.83000000000004" default-y="-3.29" id="det_0123">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur number="1" type="stop"/>
+        </notations>
+      </note>
+      <note default-x="281.3" default-y="-31.23" id="det_0108">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur number="1" type="start"/>
+        </notations>
+      </note>
+      <note default-x="303.22" default-y="-1.64" id="det_0118">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note default-x="303.22" default-y="-4.38" id="det_0121">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <slur number="1" type="stop"/>
+        </notations>
+      </note>
+    </measure>
+    <measure number="2">
+      <print new-system="yes"/>
+      <note default-x="15.0" default-y="-38.9" id="det_0137">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="127.33" default-y="-4.38" id="det_0130">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="127.88" default-y="-2.19" id="det_0136">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="189.25" default-y="-7.67" id="det_0131">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note default-x="189.25" default-y="-5.48" id="det_0138">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+  </part>
+</score-partwise>
