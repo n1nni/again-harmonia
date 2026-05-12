@@ -311,6 +311,7 @@ class HarmoniaRenderer {
     }
     this.osmd.zoom = 1.0;
     await this.osmd.render();
+    this._stripAutoAccidentals();
 
     const svgEl = this.container.querySelector('svg');
     this.svgData = svgEl ? svgEl.outerHTML : null;
@@ -318,6 +319,96 @@ class HarmoniaRenderer {
       try { this.onAfterRender(); } catch (_) { /* noop */ }
     }
     return this.svgData;
+  }
+
+  // OSMD's AccidentalCalculator emits cautionary/courtesy accidentals
+  // (most often unwanted naturals) even when the source XML has no
+  // <accidental> element. OSMD 1.8 renders via VexFlow; each stavenote
+  // becomes <g class="vf-stavenote"> containing <g class="vf-notehead">
+  // and <g class="vf-modifiers">, and the accidental is an unlabeled
+  // <path> inside vf-modifiers positioned to the LEFT of the notehead
+  // (dots sit to the right, articulations above/below). For every
+  // stavenote whose chord members all lack an XML <accidental> child,
+  // we drop the modifier children whose bbox falls left of the
+  // notehead. Runs globally on every render.
+  _stripAutoAccidentals() {
+    if (!this.osmd || !this.osmd.GraphicSheet) return;
+
+    const groups = new Map();
+
+    const gs = this.osmd.GraphicSheet;
+    gs.MusicPages.forEach((page) => {
+      page.MusicSystems.forEach((system) => {
+        (system.StaffLines || []).forEach((staffLine, staffIdxInSys) => {
+          const partIdx = this._partIndexForStaffLine(staffLine, staffIdxInSys);
+          (staffLine.Measures || []).forEach((measure) => {
+            if (!measure) return;
+            const measureIdx = this._measureIndex(measure);
+            let visibleIdx = 0;
+            (measure.staffEntries || []).forEach((se) => {
+              (se.graphicalVoiceEntries || []).forEach((gve) => {
+                (gve.notes || []).forEach((gNote) => {
+                  const src = gNote.sourceNote;
+                  if (src && src.isRest && src.isRest()) return;
+                  const xmlKey = `${partIdx}_${measureIdx}_${visibleIdx}`;
+                  visibleIdx++;
+                  const xmlEl = this.xmlNoteIndex.get(xmlKey);
+                  const hasXmlAcc = !!(xmlEl && xmlEl.querySelector('accidental'));
+
+                  const vfn = gNote.vfnote;
+                  if (!vfn || !vfn[0]) return;
+                  const vfStaveNote = vfn[0];
+
+                  let entry = groups.get(vfStaveNote);
+                  if (!entry) {
+                    let el = null;
+                    if (vfStaveNote.attrs && vfStaveNote.attrs.el) {
+                      el = vfStaveNote.attrs.el;
+                    } else if (typeof vfStaveNote.getAttribute === 'function') {
+                      el = vfStaveNote.getAttribute('el');
+                    }
+                    if (!el) return;
+                    entry = { el, anyXmlAcc: false };
+                    groups.set(vfStaveNote, entry);
+                  }
+                  if (hasXmlAcc) entry.anyXmlAcc = true;
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    groups.forEach(({ el, anyXmlAcc }) => {
+      // Conservative for chords: if any chord member has an XML
+      // accidental, leave the stavenote untouched (we can't reliably
+      // map specific VexFlow modifier children back to chord indices).
+      if (anyXmlAcc) return;
+
+      const modifiers = el.querySelector('.vf-modifiers');
+      if (!modifiers) return;
+      const noteheadPaths = el.querySelectorAll('.vf-notehead path');
+      if (!noteheadPaths.length) return;
+
+      let noteheadLeftX = Infinity;
+      noteheadPaths.forEach((nh) => {
+        try {
+          const bbox = nh.getBBox();
+          if (bbox.x < noteheadLeftX) noteheadLeftX = bbox.x;
+        } catch (_) { /* not yet in DOM — skip */ }
+      });
+      if (!Number.isFinite(noteheadLeftX)) return;
+
+      Array.from(modifiers.children).forEach((child) => {
+        try {
+          const bbox = child.getBBox();
+          if (bbox.x + bbox.width <= noteheadLeftX) {
+            child.remove();
+          }
+        } catch (_) { /* ignore */ }
+      });
+    });
   }
 
   getSvgViewBox() {

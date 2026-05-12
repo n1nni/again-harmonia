@@ -24,6 +24,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   overlay.onNoteClick = (note, dot) => editor.open(note, dot);
   overlay.enableDragging();
 
+  // Floating label that pops up next to a clicked vf-stavenote glyph,
+  // showing the OMR-recognized pitch + duration for that note. Lives
+  // inside the scan container so it positions relative to the image.
+  const scanContainer = document.getElementById('scanContainer');
+  const glyphInfoEl = document.createElement('div');
+  glyphInfoEl.className = 'glyph-info hidden';
+  scanContainer.appendChild(glyphInfoEl);
+
+  function showGlyphInfo(omr, evt) {
+    if (!omr) return;
+    const pitch = omr.pitch || '?';
+    const dur = omr.duration || '?';
+    glyphInfoEl.textContent = `${pitch} · ${dur}`;
+    // Position next to the click in scan-container-local coords.
+    const rect = scanContainer.getBoundingClientRect();
+    const x = (evt && evt.clientX != null) ? evt.clientX - rect.left : 0;
+    const y = (evt && evt.clientY != null) ? evt.clientY - rect.top : 0;
+    glyphInfoEl.style.left = `${x + 12}px`;
+    glyphInfoEl.style.top = `${y - 12}px`;
+    glyphInfoEl.classList.remove('hidden');
+  }
+  function hideGlyphInfo() {
+    glyphInfoEl.classList.add('hidden');
+  }
+
+  overlay.onGlyphClick = (omr, _wrapper, evt) => {
+    showGlyphInfo(omr, evt);
+    setStatus(`Note: ${omr.pitch || '?'} — ${omr.duration || '?'}`);
+  };
+
+  // Click anywhere else on the page dismisses the popup.
+  document.addEventListener('click', (e) => {
+    if (!glyphInfoEl.contains(e.target)
+        && !(e.target.closest && e.target.closest('.note-glyph'))) {
+      hideGlyphInfo();
+    }
+  });
+
   let uploadedFilename = null;
   let naturalWidth = null;
   let naturalHeight = null;

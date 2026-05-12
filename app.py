@@ -142,6 +142,14 @@ def upload():
     rectified_path = UPLOAD_DIR / rectified_name
     rectified_path.write_bytes(base64.b64decode(omr_data["rectified_image_b64"]))
 
+    # Dev override: when omrResponse.musicxml sits in the repo root, use
+    # its contents in place of the OMR-returned XML. Lets you iterate on
+    # the XML side without re-running OMR. Delete the file to fall back
+    # to the real response.
+    override_xml_path = BASE_DIR / "omrResponse.musicxml"
+    if override_xml_path.exists():
+        omr_data["xml"] = override_xml_path.read_text(encoding="utf-8")
+
     # Recognized MusicXML lands in omr-musicxmls/, retrievable via
     # /api/musicxml?job=<stamp>.
     xml_path = OMR_MUSICXML_DIR / f"{stamp}.musicxml"
@@ -413,14 +421,6 @@ def align_endpoint():
     scan_measures = _build_scan_measures(
         str(scan_path), scan_systems, svg_systems,
     )
-
-    # Persist alignment result alongside the scan so follow-up edits can
-    # reference it.
-    result_path = CACHE_DIR / f"{Path(filename).stem}_alignment.json"
-    try:
-        result_path.write_text(json.dumps({"notes": aligned}, indent=2), encoding="utf-8")
-    except OSError:
-        pass
 
     return jsonify(
         notes=aligned,

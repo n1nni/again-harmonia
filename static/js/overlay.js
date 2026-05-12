@@ -7,6 +7,9 @@ class NoteOverlay {
     this.notes = [];
     this.dots = new Map();
     this.onNoteClick = null;
+    // Click handler for the per-note glyph clones. Receives (omrNote, wrapper)
+    // — host wires this up to surface the note's pitch + duration.
+    this.onGlyphClick = null;
     this._naturalWidth = 0;
     this._naturalHeight = 0;
     this._regenGroup = null;
@@ -347,8 +350,29 @@ class NoteOverlay {
 
       const wrapper = document.createElementNS(SVG_NS, 'g');
       wrapper.setAttribute('transform', transform);
+      wrapper.setAttribute('class', 'note-glyph');
       wrapper.setAttribute('data-det-id', omr.note_id || '');
+      wrapper.setAttribute('data-pitch', omr.pitch || '');
+      wrapper.setAttribute('data-duration', omr.duration || '');
+
+      // Native browser tooltip on hover — shows up after the cursor sits
+      // still on the glyph for a moment, no click required.
+      const titleEl = document.createElementNS(SVG_NS, 'title');
+      titleEl.textContent = `${omr.pitch || '?'} — ${omr.duration || '?'}`;
+      wrapper.appendChild(titleEl);
+
       wrapper.appendChild(sn.cloneNode(true));
+
+      // Click → fire onGlyphClick(omr, wrapper) so the host page can
+      // surface the note's pitch + duration however it wants. The default
+      // cursor styling lives in CSS; the JS just wires up the event.
+      wrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (typeof this.onGlyphClick === 'function') {
+          this.onGlyphClick(omr, wrapper, e);
+        }
+      });
+
       this._glyphsGroup.appendChild(wrapper);
       placed++;
     }

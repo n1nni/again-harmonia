@@ -110,13 +110,21 @@ button:hover:not(:disabled) { background: #2563eb; }
 }
 
 /* Per-note glyph clones from the OSMD render placed on top of the scan.
-   Click-through so dots (when present) stay clickable. We deliberately
-   skip mix-blend-mode here — multiplying blue with the scan's black ink
-   would mute the color; using opacity instead keeps the blue distinct
-   from the original scan notes. */
+   The group itself is click-through; only the per-note wrappers receive
+   clicks (so empty space inside the group's bbox doesn't eat clicks).
+   We deliberately skip mix-blend-mode here — multiplying blue with the
+   scan's black ink would mute the color; using opacity instead keeps the
+   blue distinct from the original scan notes. */
 .note-glyphs {
   pointer-events: none;
   opacity: 0.9;
+}
+.note-glyphs .note-glyph {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.note-glyphs .note-glyph:hover {
+  opacity: 0.6;
 }
 /* Recolor every black-ink path/text from the cloned vf-stavenote groups
    to blue so the OMR-recognized notes are visually distinct from the
@@ -140,6 +148,28 @@ button:hover:not(:disabled) { background: #2563eb; }
 .note-dot:hover {
   r: 9;
   fill-opacity: 1;
+}
+
+/* Floating label that pops up next to a clicked note glyph, showing the
+   OMR-recognized pitch + duration. Positioned absolutely inside the
+   .scan-container, so coordinates are relative to the scan panel. */
+.glyph-info {
+  position: absolute;
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #2563eb;
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: translate(0, -100%);
+}
+.glyph-info.hidden {
+  display: none;
 }
 
 #osmdPanel {
